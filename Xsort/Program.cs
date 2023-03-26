@@ -14,7 +14,7 @@ namespace Xsort
                 string json = File.ReadAllText(filePath);
                 dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
 
-                jsonObj[key] = value; // if no sectionpath just set the value
+                jsonObj[key] = value;
 
                 string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
                 File.WriteAllText(filePath, output);
@@ -33,13 +33,13 @@ namespace Xsort
         {
             Console.WriteLine("Запуск приложения...");
 
-            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
-            string targetFolder = config["targetFolder"];
+            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            string? targetFolder = config["targetFolder"];
 
             while (String.IsNullOrEmpty(config["targetFolder"]))
             {
                 Console.WriteLine("Напишите полный путь до необходимой папки:");
-                string folder = Console.ReadLine();
+                string? folder = Console.ReadLine();
                 AddOrUpdateAppSetting("targetFolder", folder);
                 config["targetFolder"] = folder;
             }

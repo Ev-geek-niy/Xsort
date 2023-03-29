@@ -4,9 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace Xsort
 {
-    internal class Program
+    internal static class Program
     {
-        public static void AddOrUpdateAppSetting<T>(string key, T value)
+        private static void AddOrUpdateAppSetting<T>(string key, T value)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace Xsort
         private const string Pattern = @" +([0-9]{2,4})(\.|-)([0-9]{2})(\.|-)([0-9]{2,4}).+\.*";
         private static readonly string[] Exts = { ".png", ".jpg", ".mp4" };
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("Запуск приложения...");
 

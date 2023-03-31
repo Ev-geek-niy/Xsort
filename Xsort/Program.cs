@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Configuration;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Microsoft.Win32;
 
 namespace Xsort

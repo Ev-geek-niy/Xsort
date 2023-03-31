@@ -1,48 +1,35 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Configuration;
 using System.Text.RegularExpressions;
+using Microsoft.Win32;
 
 namespace Xsort
 {
     internal static class Program
     {
-        private static void AddOrUpdateAppSetting<T>(string key, T value)
-        {
-            try
-            {
-                var filePath = Path.Combine(AppContext.BaseDirectory, "appSettings.json");
-                string json = File.ReadAllText(filePath);
-                dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-
-                jsonObj[key] = value;
-
-                string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
-                File.WriteAllText(filePath, output);
-            }
-            catch (ConfigurationErrorsException)
-            {
-                Console.WriteLine("Error writing app settings");
-            }
-        }
-
         //language=regex
         private const string Pattern = @" +([0-9]{2,4})(\.|-)([0-9]{2})(\.|-)([0-9]{2,4}).+\.*";
         private static readonly string[] Exts = { ".png", ".jpg", ".mp4" };
 
+        private static string? CreateOrGetFolderPath()
+        {
+            var currentUser = Registry.CurrentUser;
+            var XsortRegistry = currentUser.CreateSubKey("Xsort");
+
+            while (XsortRegistry.GetValue("path") == null)
+            {
+                Console.WriteLine("Напишите полный путь до необходимой папки:");
+                string? folderPath = Console.ReadLine();
+                XsortRegistry.SetValue("path", folderPath);
+            }
+
+            return XsortRegistry.GetValue("path")?.ToString();
+        }
+
         private static void Main(string[] args)
         {
             Console.WriteLine("Запуск приложения...");
-
-            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            string? targetFolder = config["targetFolder"];
-
-            while (String.IsNullOrEmpty(config["targetFolder"]))
-            {
-                Console.WriteLine("Напишите полный путь до необходимой папки:");
-                string? folder = Console.ReadLine();
-                AddOrUpdateAppSetting("targetFolder", folder);
-                config["targetFolder"] = folder;
-            }
+            string? targetFolder = CreateOrGetFolderPath();
 
             Console.WriteLine($"Сортируем все файлы по пути: {targetFolder}");
 
@@ -54,6 +41,10 @@ namespace Xsort
                     Directory.CreateDirectory($@"{targetFolder}\{folderName}");
                     file.MoveTo($@"{targetFolder}\{folderName}\{file.Name}");
                 }
+            }
+            else
+            {
+                Console.WriteLine("Такой папки не существует.");
             }
 
             Console.WriteLine("Все готово! Нажмите любую клавишу, чтобы закончить.");

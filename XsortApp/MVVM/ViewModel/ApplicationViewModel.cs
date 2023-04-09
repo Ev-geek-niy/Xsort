@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Caliburn.Micro;
 using XsortApp.Annotations;
 using XsortApp.MVVM.Model;
 using XsortApp.Services;
@@ -17,7 +18,6 @@ public sealed class ApplicationViewModel
     public ApplicationViewModel()
     {
         AppSettings = new Settings();
-
     }
 
     public ICommand ChangeDirectoryPathCommand
@@ -54,11 +54,14 @@ public sealed class ApplicationViewModel
         }
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    [NotifyPropertyChangedInvocator]
-    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    public ICommand AutoStartupCommand
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        get
+        {
+            return new DelegateCommand((obj) =>
+            {
+                RegistryService.SetStartupRegistry(AppSettings.IsAutoStartup);
+            });
+        }
     }
 }

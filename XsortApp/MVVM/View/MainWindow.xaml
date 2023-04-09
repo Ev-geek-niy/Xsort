@@ -22,6 +22,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Column="1"
@@ -40,5 +41,10 @@
                 Grid.Row="1"
                 Content="Сортировать"
                 Command="{Binding SortFileInFolderCommand}"/>
+        <CheckBox Grid.Column="0"
+                  Grid.Row="2"
+                  Content="Автозапуск"
+                  Command="{Binding AutoStartupCommand}"
+                  IsChecked="{Binding AppSettings.IsAutoStartup}"/>
     </Grid>
 </Window>

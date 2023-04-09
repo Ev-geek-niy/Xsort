@@ -11,11 +11,13 @@ public class Settings : INotifyPropertyChanged
     private string _pattern = @" +([0-9]{2,4})(\.|-)([0-9]{2})(\.|-)([0-9]{2,4}).+\.*";
     private string? _path;
     private string[]? _exts;
+    private bool _isAutoStartup;
 
-    public Settings(string? path = null, string[]? exts = null)
+    public Settings()
     {
-        Path = path ?? Registry.CurrentUser.OpenSubKey("Xsort")?.GetValue("Path")?.ToString();
-        Exts = exts ?? new[] { ".png" };
+        Path = Registry.CurrentUser.OpenSubKey("Xsort")?.GetValue("Path")?.ToString();
+        Exts = new[] { ".png" };
+        IsAutoStartup = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Xsort") != null;
     }
 
     public string Pattern
@@ -45,6 +47,16 @@ public class Settings : INotifyPropertyChanged
         {
             _exts = value;
             OnPropertyChanged(nameof(Exts));
+        }
+    }
+
+    public bool IsAutoStartup
+    {
+        get { return _isAutoStartup; }
+        set
+        {
+            _isAutoStartup = value;
+            OnPropertyChanged(nameof(IsAutoStartup));
         }
     }
 

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Windows.Input;
 using XsortApp.MVVM.Model;
 
 namespace XsortApp.Services;

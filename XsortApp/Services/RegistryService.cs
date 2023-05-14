@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Windows.Media.Effects;
 using Microsoft.Win32;
 
 namespace XsortApp.Services;

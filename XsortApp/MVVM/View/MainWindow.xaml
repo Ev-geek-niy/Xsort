@@ -23,6 +23,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Column="1"
@@ -44,7 +45,15 @@
         <CheckBox Grid.Column="0"
                   Grid.Row="2"
                   Content="Автозапуск"
+                  VerticalContentAlignment="Center"
                   Command="{Binding AutoStartupCommand}"
                   IsChecked="{Binding AppSettings.IsAutoStartup}"/>
+        <CheckBox Content="Minimized"
+                  Grid.Column="0"
+                  Grid.Row="3"
+                  VerticalContentAlignment="Center"
+                  IsChecked="{Binding AppSettings.IsMinimized}"
+                  Command="{Binding MinimizeCommand}">
+        </CheckBox>
     </Grid>
 </Window>

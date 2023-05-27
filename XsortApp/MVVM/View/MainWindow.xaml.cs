@@ -17,6 +17,10 @@ namespace XsortApp
             dispatcherTimer.Interval = new TimeSpan(1, 0, 0);
             dispatcherTimer.Start();
             dispatcherTimer_Tick(null, EventArgs.Empty);
+
+            if (DataContext is ApplicationViewModel context)
+                if (context.AppSettings.IsMinimized)
+                    Hide();
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)

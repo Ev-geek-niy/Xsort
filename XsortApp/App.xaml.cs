@@ -36,6 +36,7 @@ namespace XsortApp
                 if (MainWindow.WindowState == WindowState.Minimized)
                 {
                     MainWindow.WindowState = WindowState.Normal;
+                    MainWindow.ShowInTaskbar = true;
                 }
 
                 MainWindow.Activate();

@@ -60,4 +60,15 @@ public sealed class ApplicationViewModel
             });
         }
     }
+
+    public ICommand MinimizeCommand
+    {
+        get
+        {
+            return new DelegateCommand((obj) =>
+            {
+                RegistryService.SetKeyValueRegistry("minimize", AppSettings.IsMinimized);
+            });
+        }
+    }
 }

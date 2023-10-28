@@ -12,12 +12,14 @@ public class Settings : INotifyPropertyChanged
     private string? _path;
     private string[]? _exts;
     private bool _isAutoStartup;
+    private bool _isMinimized;
 
     public Settings()
     {
         Path = Registry.CurrentUser.OpenSubKey("Xsort")?.GetValue("Path")?.ToString();
         Exts = new[] { ".png" };
-        IsAutoStartup = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Xsort") != null;
+        IsAutoStartup = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run")?.GetValue("Xsort") != null;
+        IsMinimized = Registry.CurrentUser.OpenSubKey("Xsort")?.GetValue("minimize").Equals("True") ?? false;
     }
 
     public string Pattern
@@ -57,6 +59,16 @@ public class Settings : INotifyPropertyChanged
         {
             _isAutoStartup = value;
             OnPropertyChanged(nameof(IsAutoStartup));
+        }
+    }
+
+    public bool IsMinimized
+    {
+        get { return _isMinimized; }
+        set
+        {
+            _isMinimized = value;
+            OnPropertyChanged(nameof(IsMinimized));
         }
     }
 

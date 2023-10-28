@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.ComponentModel;
 
 namespace XsortApp
@@ -36,6 +37,7 @@ namespace XsortApp
                 if (MainWindow.WindowState == WindowState.Minimized)
                 {
                     MainWindow.WindowState = WindowState.Normal;
+                    MainWindow.ShowInTaskbar = true;
                 }
 
                 MainWindow.Activate();
@@ -48,10 +50,7 @@ namespace XsortApp
 
         private void ExitApplication()
         {
-            _isExit = true;
-            MainWindow.Close();
-            _notifyIcon.Dispose();
-            _notifyIcon = null;
+            Environment.Exit(0);
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)

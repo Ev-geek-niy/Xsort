@@ -6,7 +6,7 @@ namespace XsortApp.Services;
 
 public static class RegistryService
 {
-    public static void SetKeyValueRegistry(string key, string valueName)
+    public static void SetKeyValueRegistry(string key, object valueName)
     {
         var currentUser = Registry.CurrentUser;
         var XsortRegistry = currentUser.CreateSubKey("Xsort");
@@ -28,7 +28,7 @@ public static class RegistryService
         string path = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
         var key = Registry.CurrentUser.OpenSubKey(path, true);
         if (isAutoStartup)
-            key.SetValue("Xsort", Process.GetCurrentProcess().MainModule.FileName);
+            key.SetValue("Xsort", Process.GetCurrentProcess().MainModule.FileName + "--autostart");
         else
             key.DeleteValue("Xsort", false);
     }

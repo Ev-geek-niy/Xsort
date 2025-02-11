@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.Win32;
-using Xsort.Services.Services.Interfaces;
+using Xsort.WPF.Services.Interfaces;
 
-namespace Xsort.Services.Services;
+namespace Xsort.WPF.Services;
 
 public class RegistryService : IRegistryService
 {

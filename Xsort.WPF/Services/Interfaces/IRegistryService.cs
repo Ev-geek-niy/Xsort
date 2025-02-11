@@ -1,4 +1,4 @@
-namespace Xsort.Services.Services.Interfaces;
+namespace Xsort.WPF.Services.Interfaces;
 
 public interface IRegistryService
 {

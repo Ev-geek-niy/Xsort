@@ -2,10 +2,11 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net9.0-windows</TargetFramework>
+        <TargetFramework>net8.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
+        <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,12 +15,22 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Xsort.Services\Xsort.Services.csproj" />
+      <None Remove="Assets\AppIcon.ico" />
+      <Content Include="Assets\AppIcon.ico">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Assets\AppIcon.ico" />
-      <Resource Include="Assets\AppIcon.ico" />
+      <Folder Include="Models\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Views\MainWindow.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
     </ItemGroup>
 
 </Project>

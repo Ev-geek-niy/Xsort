@@ -1,10 +1,9 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Xsort.Services.Services;
-using Xsort.Services.Services.Interfaces;
+using Xsort.WPF.Services;
+using Xsort.WPF.Services.Interfaces;
+using Xsort.WPF.ViewModels;
 
 namespace Xsort.WPF;
 
@@ -19,8 +18,10 @@ public partial class App : Application
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<MainWindow>();
-                services.AddTransient<IRegistryService, RegistryService>();
+                services.AddSingleton<AppSettings>();
+                RegisterUI(services);
+                RegisterServices(services);
+                RegisterViewModels(services);
             })
             .Build();
     }
@@ -29,8 +30,6 @@ public partial class App : Application
     {
         base.OnStartup(e);
         var mainWindow = _host.Services.GetRequiredService<MainWindow>();
-        mainWindow.WindowState = WindowState.Minimized;
-        mainWindow.ShowInTaskbar = false;
     }
 
     protected override async void OnExit(ExitEventArgs e)
@@ -45,5 +44,21 @@ public partial class App : Application
         {
             throw; // TODO handle exception
         }
+    }
+
+    private static void RegisterUI(IServiceCollection services)
+    {
+        services.AddSingleton<MainWindow>();
+    }
+
+    private void RegisterServices(IServiceCollection services)
+    {
+        services.AddSingleton<IRegistryService, RegistryService>();
+        services.AddSingleton<ISettingsService, SettingsService>();
+    }
+
+    private void RegisterViewModels(IServiceCollection services)
+    {
+        services.AddSingleton<MainWindowViewModel>();
     }
 }

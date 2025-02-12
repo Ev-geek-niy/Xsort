@@ -11,6 +11,7 @@ namespace Xsort.WPF.ViewModels;
 public sealed class MainWindowViewModel : INotifyPropertyChanged
 {
     private readonly ISettingsService _settingsService;
+    private readonly IStartupService _startupService;
     private readonly AppSettings _settings;
     public string FolderPath
     {
@@ -26,15 +27,15 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    public bool IsAutoStartUp
+    public bool IsAutoStartup
     {
-        get => _settings.IsAutoStartUp;
+        get => _settings.IsAutoStartup;
         set
         {
-            if (_settings.IsAutoStartUp == value)
+            if (_settings.IsAutoStartup == value)
                 return;
             
-            _settings.IsAutoStartUp = value;
+            _settings.IsAutoStartup = value;
             _settingsService.SaveSettings(_settings);
             OnPropertyChanged();
         }
@@ -55,13 +56,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     }
 
     public ICommand SetFolderPathCommand { get; set; }
-
-    public MainWindowViewModel(ISettingsService settingsService)
-    {
-        _settingsService = settingsService;
-        _settings = settingsService.LoadSettings();
-        SetFolderPathCommand = new RelayCommand(GetFolderPath);
-    }
+    public ICommand SetAutoStartupCommand { get; set; }
 
     private void GetFolderPath(object? parameters)
     {
@@ -75,10 +70,33 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             : string.Empty;
     }
 
+    public void SetAutoStartup(object? parameters)
+    {
+        if (_startupService.IsStartupEnabled())
+        {
+            _startupService.DisableStartup();
+            IsAutoStartup = false;            
+        }
+        else
+        {
+            _startupService.EnableStartup();
+            IsAutoStartup = true;
+        }
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+    
+    public MainWindowViewModel(ISettingsService settingsService, IStartupService startupService)
+    {
+        _settingsService = settingsService;
+        _startupService = startupService;
+        _settings = settingsService.LoadSettings();
+        SetFolderPathCommand = new RelayCommand(GetFolderPath);
+        SetAutoStartupCommand = new RelayCommand(SetAutoStartup);
     }
 }

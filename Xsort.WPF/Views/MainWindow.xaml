@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Xsort.WPF"
         xmlns:tb="http://www.hardcodet.net/taskbar"
-        xmlns:vm="clr-namespace:Xsort.WPF.ViewModels"
         mc:Ignorable="d"
         FontSize="18"
         Title="MainWindow" Height="250" Width="600">
@@ -55,7 +54,8 @@
                   Grid.Row="2"
                   Content="Автозапуск"
                   VerticalContentAlignment="Center"
-                  IsChecked="{Binding IsAutoStartUp}"/>
+                  Command="{Binding SetAutoStartupCommand}"
+                  IsChecked="{Binding IsAutoStartup}"/>
         <CheckBox Content="Minimized"
                   Grid.Column="0"
                   Grid.Row="3"

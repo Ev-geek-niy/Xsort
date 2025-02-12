@@ -53,7 +53,7 @@ public partial class App : Application
 
     private void RegisterServices(IServiceCollection services)
     {
-        services.AddSingleton<IRegistryService, RegistryService>();
+        services.AddSingleton<IStartupService, StartupService>();
         services.AddSingleton<ISettingsService, SettingsService>();
     }
 

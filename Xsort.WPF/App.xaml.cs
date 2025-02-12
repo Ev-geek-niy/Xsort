@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Xsort.WPF.Services;
@@ -56,6 +57,7 @@ public partial class App : Application
         services.AddSingleton<IStartupService, StartupService>();
         services.AddSingleton<ISettingsService, SettingsService>();
         services.AddSingleton<IExplorerService, ExplorerService>();
+        services.AddSingleton<IFolderWatcherService, FolderWatcherService>();
     }
 
     private void RegisterViewModels(IServiceCollection services)

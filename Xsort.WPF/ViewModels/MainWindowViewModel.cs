@@ -12,12 +12,14 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 {
     private readonly ISettingsService _settingsService;
     private readonly IStartupService _startupService;
+    private readonly IFolderWatcherService _folderWatcherService;
     private readonly AppSettings _settings;
     
-    public MainWindowViewModel(ISettingsService settingsService, IStartupService startupService)
+    public MainWindowViewModel(ISettingsService settingsService, IStartupService startupService, IFolderWatcherService folderWatcherService)
     {
         _settingsService = settingsService;
         _startupService = startupService;
+        _folderWatcherService = folderWatcherService;
         _settings = settingsService.LoadSettings();
         SetFolderPathCommand = new RelayCommand(GetFolderPath);
         SetAutoStartupCommand = new RelayCommand(SetAutoStartup);
@@ -78,6 +80,8 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         FolderPath = openFolderDialog.ShowDialog() == true
             ? openFolderDialog.FolderName
             : string.Empty;
+        
+        _folderWatcherService.ChangePath(FolderPath);
     }
 
     private void SetAutoStartup(object? parameters)

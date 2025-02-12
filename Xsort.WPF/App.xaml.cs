@@ -55,6 +55,7 @@ public partial class App : Application
     {
         services.AddSingleton<IStartupService, StartupService>();
         services.AddSingleton<ISettingsService, SettingsService>();
+        services.AddSingleton<IExplorerService, ExplorerService>();
     }
 
     private void RegisterViewModels(IServiceCollection services)

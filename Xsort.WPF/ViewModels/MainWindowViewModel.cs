@@ -70,7 +70,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             : string.Empty;
     }
 
-    public void SetAutoStartup(object? parameters)
+    private void SetAutoStartup(object? parameters)
     {
         if (_startupService.IsStartupEnabled())
         {

@@ -13,6 +13,16 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     private readonly ISettingsService _settingsService;
     private readonly IStartupService _startupService;
     private readonly AppSettings _settings;
+    
+    public MainWindowViewModel(ISettingsService settingsService, IStartupService startupService)
+    {
+        _settingsService = settingsService;
+        _startupService = startupService;
+        _settings = settingsService.LoadSettings();
+        SetFolderPathCommand = new RelayCommand(GetFolderPath);
+        SetAutoStartupCommand = new RelayCommand(SetAutoStartup);
+    }
+    
     public string FolderPath
     {
         get => _settings.FolderPath;
@@ -89,14 +99,5 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-    
-    public MainWindowViewModel(ISettingsService settingsService, IStartupService startupService)
-    {
-        _settingsService = settingsService;
-        _startupService = startupService;
-        _settings = settingsService.LoadSettings();
-        SetFolderPathCommand = new RelayCommand(GetFolderPath);
-        SetAutoStartupCommand = new RelayCommand(SetAutoStartup);
     }
 }

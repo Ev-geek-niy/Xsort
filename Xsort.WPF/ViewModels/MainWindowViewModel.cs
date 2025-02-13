@@ -32,7 +32,8 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         SetFolderPathCommand = new RelayCommand(GetFolderPath);
         SetAutoStartupCommand = new RelayCommand(SetAutoStartup);
         
-        _folderWatcherService.StartWatch();
+        if (!string.IsNullOrEmpty(FolderPath))
+            _folderWatcherService.StartWatch();
     }
     
     public string FolderPath

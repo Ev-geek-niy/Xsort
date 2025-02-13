@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Xsort.WPF.Models;
@@ -30,8 +31,14 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        DispatcherUnhandledException += OnDispatcherUnhandledException;
         base.OnStartup(e);
         var mainWindow = _host.Services.GetRequiredService<MainWindow>();
+    }
+
+    private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+        MessageBox.Show(e.Exception.Message);
     }
 
     protected override async void OnExit(ExitEventArgs e)
@@ -58,4 +65,6 @@ public partial class App : Application
     {
         services.AddSingleton<MainWindowViewModel>();
     }
+    
+    
 }

@@ -2,6 +2,7 @@
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Xsort.WPF.Models;
 using Xsort.WPF.Services;
 using Xsort.WPF.Services.Interfaces;
 using Xsort.WPF.ViewModels;
@@ -35,16 +36,9 @@ public partial class App : Application
 
     protected override async void OnExit(ExitEventArgs e)
     {
-        try
-        {
-            await _host.StopAsync();
-            _host.Dispose();
-            base.OnExit(e);
-        }
-        catch (Exception ex)
-        {
-            throw; // TODO handle exception
-        }
+        await _host.StopAsync();
+        _host.Dispose();
+        base.OnExit(e);
     }
 
     private static void RegisterUI(IServiceCollection services)

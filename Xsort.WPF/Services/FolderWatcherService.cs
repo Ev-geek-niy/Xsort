@@ -1,4 +1,5 @@
 using System.IO;
+using Xsort.WPF.Models;
 using Xsort.WPF.Services.Interfaces;
 
 namespace Xsort.WPF.Services;
@@ -12,7 +13,7 @@ public class FolderWatcherService : IFolderWatcherService
     public FolderWatcherService(ISettingsService settingsService, IExplorerService explorerService)
     {
         _explorerService = explorerService;
-        _settings = settingsService.LoadSettings();
+        _settings = settingsService.CurrentSettings;
     }
     
     public void StartWatch()
@@ -22,12 +23,21 @@ public class FolderWatcherService : IFolderWatcherService
             _watcher.EnableRaisingEvents = false;
             _watcher.Dispose();
         }
-
+        
         _watcher = new FileSystemWatcher(_settings.FolderPath)
             {NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.DirectoryName};
-
-        _watcher.Changed += (sender, args) => _explorerService.SortFiles();
-        
+        _watcher.Changed += (sender, args) =>
+        {
+            _watcher.EnableRaisingEvents = false;
+            try
+            {
+                _explorerService.SortFiles();
+            }
+            finally
+            {
+                _watcher.EnableRaisingEvents = true;
+            }
+        };
         _watcher.EnableRaisingEvents = true;
     }
 

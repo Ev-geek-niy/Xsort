@@ -1,6 +1,6 @@
 using System.IO;
-using System.Net;
 using System.Text.Json;
+using Xsort.WPF.Models;
 using Xsort.WPF.Services.Interfaces;
 
 namespace Xsort.WPF.Services;
@@ -8,6 +8,12 @@ namespace Xsort.WPF.Services;
 public class SettingsService : ISettingsService
 {
     private const string SettingsFileName = "settings.json";
+    public AppSettings CurrentSettings { get; }
+
+    public SettingsService()
+    {
+        CurrentSettings = LoadSettings();
+    }
     
     public AppSettings LoadSettings()
     {
@@ -20,9 +26,15 @@ public class SettingsService : ISettingsService
         return JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
     }
 
-    public void SaveSettings(AppSettings settings)
+    public void SaveSettings()
     {
-        var json = JsonSerializer.Serialize(settings, new JsonSerializerOptions {WriteIndented = true});
+        var json = JsonSerializer.Serialize(CurrentSettings, new JsonSerializerOptions {WriteIndented = true});
         File.WriteAllText(SettingsFileName, json);
+    }
+
+    public void UpdateSettings(Action<AppSettings> updateSettingsAction)
+    {
+        updateSettingsAction(CurrentSettings);
+        SaveSettings();
     }
 }

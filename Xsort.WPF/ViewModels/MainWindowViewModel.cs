@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Microsoft.Win32;
 using Xsort.WPF.Commands;
+using Xsort.WPF.Models;
 using Xsort.WPF.Services.Interfaces;
 
 namespace Xsort.WPF.ViewModels;
@@ -13,56 +14,65 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     private readonly ISettingsService _settingsService;
     private readonly IStartupService _startupService;
     private readonly IFolderWatcherService _folderWatcherService;
-    private readonly AppSettings _settings;
+
+    private string _folderPath;
+    private bool _isAutostartup;
+    private bool _isMinimized;
     
     public MainWindowViewModel(ISettingsService settingsService, IStartupService startupService, IFolderWatcherService folderWatcherService)
     {
         _settingsService = settingsService;
         _startupService = startupService;
         _folderWatcherService = folderWatcherService;
-        _settings = settingsService.LoadSettings();
+
+        _folderPath = _settingsService.CurrentSettings.FolderPath;
+        _isAutostartup = _settingsService.CurrentSettings.IsAutoStartup;
+        _isMinimized = _settingsService.CurrentSettings.IsMinimized;
+        
         SetFolderPathCommand = new RelayCommand(GetFolderPath);
         SetAutoStartupCommand = new RelayCommand(SetAutoStartup);
+        
+        _folderWatcherService.StartWatch();
     }
     
     public string FolderPath
     {
-        get => _settings.FolderPath;
+        get => _folderPath;
         set
         {
-            if (_settings.FolderPath == value)
+            if (_folderPath == value)
                 return;
             
-            _settings.FolderPath = value;
-            _settingsService.SaveSettings(_settings);
+            _folderPath = value;
+            _settingsService.UpdateSettings(s => s.FolderPath = _folderPath);
             OnPropertyChanged();
         }
     }
 
     public bool IsAutoStartup
     {
-        get => _settings.IsAutoStartup;
+        get => _isAutostartup;
         set
         {
-            if (_settings.IsAutoStartup == value)
+            if (_isAutostartup == value)
                 return;
             
-            _settings.IsAutoStartup = value;
-            _settingsService.SaveSettings(_settings);
+            _isAutostartup = value;
+            _settingsService.UpdateSettings(s => s.IsAutoStartup = _isAutostartup);
             OnPropertyChanged();
         }
     }
     
     public bool IsMinimized
     {
-        get => _settings.IsMinimized;
+        get => _isMinimized;
         set
         {
-            if (_settings.IsMinimized == value)
+            if (_isMinimized == value)
                 return;
             
-            _settings.IsMinimized = value;
-            _settingsService.SaveSettings(_settings);
+            _isMinimized = value;
+            _settingsService.UpdateSettings(s => s.IsMinimized = _isMinimized);
             OnPropertyChanged();
         }
     }

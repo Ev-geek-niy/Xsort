@@ -18,12 +18,13 @@ namespace Xsort.WPF;
 public partial class App : Application
 {
     private readonly IHost _host;
+    private static Mutex? _mutex;
     public App()
     {
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .Build();
-        
+
         Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .CreateLogger();
@@ -42,6 +43,13 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        const string mutexName = "Global\\Xsort";
+        
+        _mutex = new Mutex(true, mutexName, out bool createdNew);
+
+        if (!createdNew)
+            Environment.Exit(0);
+        
         DispatcherUnhandledException += OnDispatcherUnhandledException;
         base.OnStartup(e);
         var mainWindow = _host.Services.GetRequiredService<MainWindow>();
@@ -49,6 +57,7 @@ public partial class App : Application
 
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
+        Log.Error(e.Exception, "Unhandled exception");
         MessageBox.Show(e.Exception.Message);
     }
 

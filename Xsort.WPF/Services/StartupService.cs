@@ -7,7 +7,7 @@ namespace Xsort.WPF.Services;
 public class StartupService : IStartupService
 {
     private const string ApplicationName = "Xsort";
-    private readonly string _applicationPath = Path.Combine(AppContext.BaseDirectory, "Xsort.WPF.exe");
+    private readonly string _applicationPath = Environment.ProcessPath ?? throw new Exception("No process path");
     private const string RegistryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
 
     public void EnableStartup()

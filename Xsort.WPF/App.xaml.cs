@@ -1,12 +1,14 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Threading;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using Xsort.WPF.Models;
 using Xsort.WPF.Services;
 using Xsort.WPF.Services.Interfaces;
 using Xsort.WPF.ViewModels;
+using Serilog;
 
 namespace Xsort.WPF;
 
@@ -18,9 +20,18 @@ public partial class App : Application
     private readonly IHost _host;
     public App()
     {
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+        
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configuration)
+            .CreateLogger();
+        
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
+                services.AddSerilog();
                 services.AddSingleton<AppSettings>();
                 RegisterUI(services);
                 RegisterServices(services);

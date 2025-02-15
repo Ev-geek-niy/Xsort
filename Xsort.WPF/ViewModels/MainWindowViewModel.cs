@@ -89,11 +89,8 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             Title = "Выберите путь до папки"
         };
 
-        FolderPath = openFolderDialog.ShowDialog() == true
-            ? openFolderDialog.FolderName
-            : string.Empty;
-        
-        _folderWatcherService.ChangePath(FolderPath);
+        if (openFolderDialog.ShowDialog() == true)
+            _folderWatcherService.ChangePath(openFolderDialog.FolderName);
     }
 
     private void OpenFolder(object? parameters)

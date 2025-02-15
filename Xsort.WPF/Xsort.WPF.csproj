@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
+        <AssemblyName>Xsort</AssemblyName>
         <TargetFramework>net8.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -43,10 +44,6 @@
       <ProjectReference Include="..\Xsort.Core\Xsort.Core.csproj" />
       <ProjectReference Include="..\Xsort.Infrastructure\Xsort.Infrastructure.csproj" />
       <ProjectReference Include="..\Xsort.Services\Xsort.Services.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Extensions\" />
     </ItemGroup>
 
 </Project>

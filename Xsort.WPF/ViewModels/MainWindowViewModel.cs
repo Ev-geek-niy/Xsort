@@ -1,5 +1,7 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Microsoft.Win32;
 using Xsort.Core.Interfaces;
@@ -25,10 +27,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
         _folderPath = _settingsService.CurrentSettings.FolderPath;
         _isAutostartup = _settingsService.CurrentSettings.IsAutoStartup;
-        _isMinimized = _settingsService.CurrentSettings.IsMinimized;
         
         SetFolderPathCommand = new RelayCommand(GetFolderPath);
         SetAutoStartupCommand = new RelayCommand(SetAutoStartup);
+        OpenFolderCommand = new RelayCommand(OpenFolder);
         
         if (!string.IsNullOrEmpty(FolderPath))
             _folderWatcherService.StartWatch();
@@ -78,6 +80,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
 
     public ICommand SetFolderPathCommand { get; set; }
     public ICommand SetAutoStartupCommand { get; set; }
+    public ICommand OpenFolderCommand { get; set; }
 
     private void GetFolderPath(object? parameters)
     {
@@ -91,6 +94,14 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             : string.Empty;
         
         _folderWatcherService.ChangePath(FolderPath);
+    }
+
+    private void OpenFolder(object? parameters)
+    {
+        Process.Start(new ProcessStartInfo("explorer.exe", FolderPath)
+        {
+            UseShellExecute = true
+        });
     }
 
     private void SetAutoStartup(object? parameters)

@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
+using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
 using Xsort.WPF.ViewModels;
 
 namespace Xsort.WPF;
@@ -9,7 +11,7 @@ namespace Xsort.WPF;
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window
+public partial class MainWindow : FluentWindow
 {
     public MainWindow(MainWindowViewModel viewModel)
     {

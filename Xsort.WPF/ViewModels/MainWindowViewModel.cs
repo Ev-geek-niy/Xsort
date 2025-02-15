@@ -90,7 +90,10 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         };
 
         if (openFolderDialog.ShowDialog() == true)
-            _folderWatcherService.ChangePath(openFolderDialog.FolderName);
+        {
+            FolderPath = openFolderDialog.FolderName;
+            _folderWatcherService.ChangePath(FolderPath);
+        }
     }
 
     private void OpenFolder(object? parameters)

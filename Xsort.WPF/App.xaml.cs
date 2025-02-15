@@ -24,9 +24,11 @@ public partial class App : Application
     private readonly ILogger<App> _logger;
     public App()
     {
-        var configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .Build();
+        var configuration = DebugHelper.IsDebug()
+            ? new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build()
+            : new ConfigurationBuilder().Build();
 
         var loggerFactory = SerilogLogger.CreateLoggerFactory(configuration);
         _logger = loggerFactory.CreateLogger<App>();

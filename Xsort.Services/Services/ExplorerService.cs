@@ -1,10 +1,9 @@
-using System.IO;
 using System.Text.RegularExpressions;
-using Xsort.WPF.Extensions;
-using Xsort.WPF.Models;
-using Xsort.WPF.Services.Interfaces;
+using Xsort.Core.Extensions;
+using Xsort.Core.Interfaces;
+using Xsort.Core.Models;
 
-namespace Xsort.WPF.Services;
+namespace Xsort.Services.Services;
 
 public class ExplorerService : IExplorerService
 {

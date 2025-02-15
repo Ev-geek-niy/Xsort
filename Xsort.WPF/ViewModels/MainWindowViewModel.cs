@@ -1,11 +1,9 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Forms;
 using System.Windows.Input;
 using Microsoft.Win32;
+using Xsort.Core.Interfaces;
 using Xsort.WPF.Commands;
-using Xsort.WPF.Models;
-using Xsort.WPF.Services.Interfaces;
 
 namespace Xsort.WPF.ViewModels;
 

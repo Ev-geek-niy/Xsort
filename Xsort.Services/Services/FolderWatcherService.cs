@@ -1,8 +1,7 @@
-using System.IO;
-using Xsort.WPF.Models;
-using Xsort.WPF.Services.Interfaces;
+using Xsort.Core.Interfaces;
+using Xsort.Core.Models;
 
-namespace Xsort.WPF.Services;
+namespace Xsort.Services.Services;
 
 public class FolderWatcherService : IFolderWatcherService
 {

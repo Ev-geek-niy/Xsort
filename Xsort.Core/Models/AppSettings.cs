@@ -1,4 +1,4 @@
-namespace Xsort.WPF.Models;
+namespace Xsort.Core.Models;
 
 public class AppSettings
 {

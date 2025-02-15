@@ -1,10 +1,10 @@
-using System.IO;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using Xsort.WPF.Models;
-using Xsort.WPF.Services.Interfaces;
+using Xsort.Core.Interfaces;
+using Xsort.Core.Models;
+using Xsort.Infrastructure.FileStorage;
 
-namespace Xsort.WPF.Services;
+namespace Xsort.Services.Services;
 
 public class SettingsService : ISettingsService
 {
@@ -24,20 +24,13 @@ public class SettingsService : ISettingsService
     {
         _logger.LogInformation("Поиск файла с настройками: {SettingsPath}", 
             SettingsPath);
-        
-        if (!File.Exists(SettingsPath))
-        {
-            return new AppSettings();
-        }
-        
-        var json = File.ReadAllText(SettingsPath);
-        return JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
+
+        return JsonFileStorage.Load<AppSettings>(SettingsPath) ?? new AppSettings();
     }
 
     public void SaveSettings()
     {
-        var json = JsonSerializer.Serialize(CurrentSettings, new JsonSerializerOptions {WriteIndented = true});
-        File.WriteAllText(SettingsPath, json);
+        JsonFileStorage.Save(SettingsPath, CurrentSettings);
     }
 
     public void UpdateSettings(Action<AppSettings> updateSettingsAction)

@@ -1,4 +1,4 @@
-namespace Xsort.WPF.Services.Interfaces;
+namespace Xsort.Core.Interfaces;
 
 public interface IExplorerService
 {

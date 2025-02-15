@@ -1,6 +1,4 @@
-using System.IO;
-
-namespace Xsort.WPF.Extensions;
+namespace Xsort.Core.Extensions;
 
 public static class FileInfoExtension
 {

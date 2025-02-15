@@ -3,12 +3,14 @@ using System.Windows.Threading;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
-using Xsort.WPF.Models;
-using Xsort.WPF.Services;
-using Xsort.WPF.Services.Interfaces;
+using Xsort.Core.Helpers;
+using Xsort.Core.Interfaces;
 using Xsort.WPF.ViewModels;
-using Serilog;
+using Xsort.Core.Models;
+using Xsort.Infrastructure.Logging;
+using Xsort.Services.Services;
 
 namespace Xsort.WPF;
 
@@ -19,21 +21,21 @@ public partial class App : Application
 {
     private readonly IHost _host;
     private static Mutex? _mutex;
+    private readonly ILogger<App> _logger;
     public App()
     {
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
             .Build();
 
-        Log.Logger = new LoggerConfiguration()
-            .ReadFrom.Configuration(configuration)
-            .CreateLogger();
+        var loggerFactory = SerilogLogger.CreateLoggerFactory(configuration);
+        _logger = loggerFactory.CreateLogger<App>();
         
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
-                services.AddSerilog();
-                services.AddSingleton<AppSettings>();
+                services.AddSingleton(loggerFactory);
+                services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
                 RegisterUI(services);
                 RegisterServices(services);
                 RegisterViewModels(services);
@@ -43,9 +45,9 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        const string mutexName = "Global\\Xsort";
+        var mutexName = DebugHelper.IsDebug() ? "Xsort" : "Debug-Xsort";
         
-        _mutex = new Mutex(true, mutexName, out bool createdNew);
+        _mutex = new Mutex(true, mutexName, out var createdNew);
 
         if (!createdNew)
             Environment.Exit(0);
@@ -75,7 +77,7 @@ public partial class App : Application
 
     private void RegisterServices(IServiceCollection services)
     {
-        services.AddSingleton<IStartupService, StartupService>();
+        services.AddSingleton<IStartupService, WindowsStartupService>();
         services.AddSingleton<ISettingsService, SettingsService>();
         services.AddSingleton<IExplorerService, ExplorerService>();
         services.AddSingleton<IFolderWatcherService, FolderWatcherService>();

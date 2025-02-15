@@ -39,4 +39,14 @@
       </Page>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Xsort.Core\Xsort.Core.csproj" />
+      <ProjectReference Include="..\Xsort.Infrastructure\Xsort.Infrastructure.csproj" />
+      <ProjectReference Include="..\Xsort.Services\Xsort.Services.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Extensions\" />
+    </ItemGroup>
+
 </Project>

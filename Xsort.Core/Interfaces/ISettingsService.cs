@@ -1,6 +1,6 @@
-using Xsort.WPF.Models;
+using Xsort.Core.Models;
 
-namespace Xsort.WPF.Services.Interfaces;
+namespace Xsort.Core.Interfaces;
 
 public interface ISettingsService
 {

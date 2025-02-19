@@ -1,0 +1,58 @@
+stages:
+  - build
+  - release
+
+variables:
+  BUILD_DIR: "out"
+  PROJECT_PATH: "Xsort.WPF/Xsort.WPF.csproj"
+  DOTNET_VERSION: "8.0"
+  RUNTIME: "win-x64"
+  GIT_USER: "oauth2"
+  GIT_PASS: "$GITLAB_PAT"
+
+before_script:
+  - echo "$APPSETTINGS_JSON" > /builds/csharp-projects8840208/Xsort/Xsort.WPF/appsettings.json
+  - LAST_TAG=$(git describe --tags --abbrev=0 || echo "v0.0.0")
+  - |
+    VERSION_PARTS=(${LAST_TAG//./ })
+    MAJOR=${VERSION_PARTS[0]#v}  # Убираем 'v' из версии
+    MINOR=${VERSION_PARTS[1]:-0}
+    PATCH=${VERSION_PARTS[2]:-0}
+    PATCH=$((PATCH + 1))
+    NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+    echo "New version: $NEW_VERSION"
+    echo "NEW_VERSION=$NEW_VERSION" >> variables.env
+
+build:
+  stage: build
+  image: mcr.microsoft.com/dotnet/sdk:$DOTNET_VERSION
+  script:
+  - echo "Publishing application..."
+  - dotnet publish "$PROJECT_PATH" -o "$BUILD_DIR" -c Release -r "$RUNTIME" -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true -p:PublishReadyToRun=true -p:DebugSymbols=false -p:Optimize=true -p:DebugType=None --no-self-contained
+
+  artifacts:
+    paths:
+      - $BUILD_DIR/
+    expire_in: 1 week
+
+release:
+  stage: release
+  image: mcr.microsoft.com/dotnet/sdk:$DOTNET_VERSION
+  script:
+    - echo "Creating new tag..."
+    - |
+    - git config user.email "ci-runner@gitlab.com" &&
+      git config user.name "CI Runner" &&
+      git tag "$NEW_VERSION" &&
+      git remote set-url origin "https://${GIT_USER}:${GIT_PASS}@gitlab.com/csharp-projects8840208/Xsort.git" &&
+      git push origin "$NEW_VERSION"
+    - echo "Creating release..."
+    - |
+       curl --request POST --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
+        --data "tag_name=v$VERSION&name=Release v$VERSION&description=New release" \
+        "$CI_API_V4_URL/projects/$CI_PROJECT_ID/releases"
+
+  dependencies:
+    - build
+  only:
+    - main

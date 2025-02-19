@@ -3,6 +3,9 @@ image: mcr.microsoft.com/dotnet/sdk:8.0
 stages:
   - build
 
+variables:
+  APPSETTINGS_PATH: "./appsettings.json"
+
 build:
   stage: build
   script:

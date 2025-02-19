@@ -9,6 +9,8 @@ variables:
   RUNTIME: "win-x64"
   GIT_USER: "oauth2"
   GIT_PASS: "$GITLAB_PAT"
+  GITLAB_API_URL: "https://gitlab.com/api/v4"
+  GITLAB_PROJECT_ID: "$CI_PROJECT_ID"
 
 before_script:
   - echo "$APPSETTINGS_JSON" > /builds/csharp-projects8840208/Xsort/Xsort.WPF/appsettings.json
@@ -47,11 +49,17 @@ release:
       git remote set-url origin "https://${GIT_USER}:${GIT_PASS}@gitlab.com/csharp-projects8840208/Xsort.git" &&
       git push origin "$NEW_VERSION"
     - echo "Creating release..."
-    - |
-       curl --request POST --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN"
-        --data "tag_name=v$VERSION&name=Release v$VERSION&description=New release"
-        "$CI_API_V4_URL/projects/$CI_PROJECT_ID/releases"
-
+    - export RELEASE_TAG="v$NEW_VERSION"
+    - export RELEASE_NAME="Release $NEW_VERSION"
+    - export RELEASE_DESCRIPTION="Release created for version $NEW_VERSION from commit $CI_COMMIT_SHA"
+    - >
+      curl --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" \
+      --data "tag_name=$RELEASE_TAG" \
+      --data "name=$RELEASE_NAME" \
+      --data "description=$RELEASE_DESCRIPTION" \
+      --data "ref=$CI_COMMIT_SHA" \
+      --data "assets[files][]=$CI_PROJECT_DIR/$BUILD_DIR/your-artifact.zip" \
+      "$GITLAB_API_URL/projects/$GITLAB_PROJECT_ID/releases"
   dependencies:
     - build
   only:

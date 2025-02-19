@@ -18,7 +18,7 @@ build:
   image: mcr.microsoft.com/dotnet/sdk:$DOTNET_VERSION
   script:
   - echo "Publishing application..."
-  - dotnet publish "$PROJECT_PATH" -o "$BUILD_DIR" -c Release -r "$RUNTIME" -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true -p:PublishReadyToRun=true -p:DebugSymbols=false -p:Optimize=true --no-self-contained
+  - dotnet publish "$PROJECT_PATH" -o "$BUILD_DIR" -c Release -r "$RUNTIME" -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true -p:PublishReadyToRun=true -p:DebugSymbols=false -p:Optimize=true -p:DebugType=None --no-self-contained
 
   artifacts:
     paths:

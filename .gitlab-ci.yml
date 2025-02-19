@@ -46,7 +46,7 @@ release:
       git tag "$NEW_VERSION" &&
       git remote set-url origin "https://${GIT_USER}:${GIT_PASS}@gitlab.com/csharp-projects8840208/Xsort.git" &&
       git push origin "$NEW_VERSION"
-      echo "Creating release..."
+    - echo "Creating release..."
     - |
        curl --request POST --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
         --data "tag_name=v$VERSION&name=Release v$VERSION&description=New release" \

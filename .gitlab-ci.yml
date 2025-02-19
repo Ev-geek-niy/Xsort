@@ -48,8 +48,8 @@ release:
       git push origin "$NEW_VERSION"
     - echo "Creating release..."
     - |
-       curl --request POST --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
-        --data "tag_name=v$VERSION&name=Release v$VERSION&description=New release" \
+       curl --request POST --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN"
+        --data "tag_name=v$VERSION&name=Release v$VERSION&description=New release"
         "$CI_API_V4_URL/projects/$CI_PROJECT_ID/releases"
 
   dependencies:

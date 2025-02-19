@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
@@ -8,6 +8,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
         <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
+        <EnableWindowsTargeting>true</EnableWindowsTargeting>
     </PropertyGroup>
 
     <ItemGroup>

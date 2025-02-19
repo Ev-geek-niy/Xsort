@@ -54,11 +54,11 @@ release:
     - export RELEASE_DESCRIPTION="Release created for version $NEW_VERSION from commit $CI_COMMIT_SHA"
     - >
       curl --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" \
-      --data "tag_name=$RELEASE_TAG" \
-      --data "name=$RELEASE_NAME" \
-      --data "description=$RELEASE_DESCRIPTION" \
-      --data "ref=$CI_COMMIT_SHA" \
-      --data "assets[files][]=$CI_PROJECT_DIR/$BUILD_DIR/your-artifact.zip" \
+      --data-urlencode "tag_name=$RELEASE_TAG" \
+      --data-urlencode "name=$RELEASE_NAME" \
+      --data-urlencode "description=$RELEASE_DESCRIPTION" \
+      --data-urlencode "ref=$CI_COMMIT_SHA" \
+      --form "assets[files][]=@$CI_PROJECT_DIR/$BUILD_DIR/your-artifact.zip" \
       "$GITLAB_API_URL/projects/$GITLAB_PROJECT_ID/releases"
   dependencies:
     - build

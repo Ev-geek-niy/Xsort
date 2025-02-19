@@ -12,16 +12,11 @@ build:
   stage: build
   image: mcr.microsoft.com/dotnet/sdk:$DOTNET_VERSION
   script:
-    - echo "Restoring dependencies..."
-    - dotnet restore $PROJECT_PATH
-    - echo "Publishing application..."
-    - dotnet publish $PROJECT_PATH -o $BUILD_DIR -c Release -r $RUNTIME \
-        -p:PublishSingleFile=true \
-        -p:IncludeNativeLibrariesForSelfExtract=true \
-        -p:IncludeAllContentForSelfExtract=true \
-        -p:PublishReadyToRun=true \
-        -p:DebugSymbols=false \
-        --no-self-contained
+  - echo "Building application..."
+  - dotnet publish $PROJECT_PATH -o $BUILD_DIR -c Release -r $RUNTIME \
+    -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true \
+    -p:IncludeAllContentForSelfExtract=true -p:PublishReadyToRun=true \
+    -p:DebugSymbols=false --no-self-contained
     - echo "Build completed."
 
   artifacts:

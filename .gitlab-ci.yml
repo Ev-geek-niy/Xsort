@@ -4,7 +4,9 @@ stages:
   - build
 
 before_script:
+  - mkdir -p Xsort/Xsort.WPF
   - echo "$APPSETTINGS_JSON" > Xsort/Xsort.WPF/appsettings.json
+
 
 
 build:

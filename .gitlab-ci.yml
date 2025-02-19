@@ -6,12 +6,15 @@ stages:
 before_script:
   - mkdir -p Xsort/Xsort.WPF
   - echo "$APPSETTINGS_JSON" > Xsort/Xsort.WPF/appsettings.json
+  - cat Xsort/Xsort.WPF/appsettings.json  # Проверка содержимого
+
 
 
 
 build:
   stage: build
   script:
+    - ls -la Xsort/Xsort.WPF
     - dotnet restore
     - dotnet build --configuration Release
     - dotnet publish -c Release -o out

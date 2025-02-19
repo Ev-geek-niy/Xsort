@@ -7,6 +7,8 @@ variables:
   PROJECT_PATH: "Xsort.WPF/Xsort.WPF.csproj"
   DOTNET_VERSION: "8.0"
   RUNTIME: "win-x64"
+  GIT_USER: "oauth2"
+  GIT_PASS: "$GITLAB_PAT"
 
 before_script:
   - echo "$APPSETTINGS_JSON" > /builds/csharp-projects8840208/Xsort/Xsort.WPF/appsettings.json
@@ -39,9 +41,11 @@ release:
   script:
     - echo "Creating new tag..."
     - |
-      git tag "v$NEW_VERSION"
-      git push origin "v$NEW_VERSION"
-      git push origin "v$NEW_VERSION"
+    - git config --global user.email "ci-runner@gitlab.com"
+      git config --global user.name "CI Runner"
+      git tag "$NEW_VERSION"
+      git remote set-url origin "https://${GIT_USER}:${GIT_PASS}@gitlab.com/csharp-projects8840208/Xsort.git"
+      git push origin "$NEW_VERSION"
       echo "Creating release..."
     - |
        curl --request POST --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \

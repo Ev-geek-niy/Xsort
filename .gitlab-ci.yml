@@ -14,10 +14,7 @@ before_script:
 build:
   stage: build
   script:
-    - ls -la Xsort/Xsort.WPF
-    - dotnet restore
-    - dotnet build --configuration Release
-    - dotnet publish -c Release -r win-x64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true -p:PublishReadyToRun=true -p:DebugSymbols=false --no-self-contained -o out
+    - dotnet publish -o out -c Release -r win-x64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true -p:PublishReadyToRun=true -p:DebugSymbols=false --no-self-contained
   artifacts:
     paths:
       - out/

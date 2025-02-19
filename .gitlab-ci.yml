@@ -9,7 +9,7 @@ variables:
   RUNTIME: "win-x64"
 
 before_script:
-  - echo "$APPSETTINGS_JSON" > Xsort/Xsort.WPF/appsettings.json
+  - echo "$APPSETTINGS_JSON" > /builds/csharp-projects8840208/Xsort/Xsort.WPF/appsettings.json
   - cat Xsort/Xsort.WPF/appsettings.json
   - |
     LAST_TAG=$(git describe --tags --abbrev=0 || echo "v0.0.0")

@@ -12,6 +12,15 @@ before_script:
   - mkdir -p Xsort/Xsort.WPF
   - echo $APPSETTINGS_JSON > /builds/csharp-projects8840208/Xsort/Xsort.WPF/appsettings.json
   - cat /builds/csharp-projects8840208/Xsort/Xsort.WPF/appsettings.json
+  # Устанавливаем версию
+  - LAST_TAG=$(git describe --tags --abbrev=0)
+  - VERSION_PARTS=(${LAST_TAG//./ })
+  - MAJOR=${VERSION_PARTS[0]}
+  - MINOR=${VERSION_PARTS[1]}
+  - PATCH=${VERSION_PARTS[2]}
+  - PATCH=$((PATCH + 1))
+  - NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+  - echo "New version: $NEW_VERSION"
 
 build:
   stage: build
@@ -25,20 +34,20 @@ build:
       - $BUILD_DIR/
     expire_in: 1 week
 
-# release:
-#   stage: release
-#   image: mcr.microsoft.com/dotnet/sdk:$DOTNET_VERSION
-#   script:
-#     - echo "Creating Git tag..."
-#     - export VERSION=$(date +'%Y.%m.%d')  # Или другая логика версионирования
-#     - git tag "v$VERSION"
-#     - git push origin "v$VERSION"
-#     - echo "Creating release..."
-#     - curl --request POST --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
-#         --data "tag_name=v$VERSION&name=Release v$VERSION&description=New release" \
-#         "$CI_API_V4_URL/projects/$CI_PROJECT_ID/releases"
+release:
+  stage: release
+  image: mcr.microsoft.com/dotnet/sdk:$DOTNET_VERSION
+  script:
+    - echo "Creating new tag..."
+    - git tag "v$NEW_VERSION"
+    - git push origin "v$NEW_VERSION"
+    - git push origin "v$NEW_VERSION"
+    - echo "Creating release..."
+    - curl --request POST --header "PRIVATE-TOKEN: $GITLAB_API_TOKEN" \
+        --data "tag_name=v$VERSION&name=Release v$VERSION&description=New release" \
+        "$CI_API_V4_URL/projects/$CI_PROJECT_ID/releases"
 
-#   dependencies:
-#     - build
-#   only:
-#     - main
+  dependencies:
+    - build
+  # only:
+  #   - main
